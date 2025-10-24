@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>My Complaints - College Voice</title>
+    <link rel="stylesheet" href="style.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css" />
+</head>
+
+<body>
+
+    <header class="header">
+        <div class="logo">College Voice</div>
+        <nav class="nav-links">
+            <a href="index.html">Home</a>
+            <a href="complaint.html" class="active">My Complaints</a>
+            <a href="about.html">About</a>
+        </nav>
+        <div class="user-profile">
+            <img src="profile.png" alt="Profile" class="profile-img" id="profileImg">
+            <span id="username"></span>
+            <script>
+
+                document.addEventListener("DOMContentLoaded", () => {
+                    const name = localStorage.getItem("name");
+                    if (name) {
+                        document.getElementById("username").innerText = `Welcome, ${name}`;
+                    } else {
+                        document.getElementById("username").innerText = "Guest";
+                    }
+                });
+            </script>
+        </div>
+    </header>
+
+    <main class="form-section">
+        <div class="form-container">
+            <div class="form-header">
+                <h2>My Complaints</h2>
+                <p>View and track the status of your submitted complaints.</p>
+            </div>
+
+            <div class="complaint-card">
+                <h3>Issue with Library Book Availability</h3>
+                <p><strong>Status:</strong> Pending</p>
+                <p><strong>Description:</strong> Books in the reference section are always unavailable.</p>
+            </div>
+
+        </div>
+    </main>
+
+    <footer class="footer">
+        <p>&copy; 2025 College Voice Portal. All Rights Reserved.</p>
+    </footer>
+
+</body>
+
+</html>

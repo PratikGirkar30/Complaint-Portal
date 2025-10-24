@@ -1,0 +1,64 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>About - College Voice</title>
+    <link rel="stylesheet" href="style.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css" />
+</head>
+
+<body>
+
+    <header class="header">
+        <div class="logo">College Voice</div>
+        <nav class="nav-links">
+            <a href="index.html">Home</a>
+            <a href="complaint.html">My Complaints</a>
+            <a href="about.html" class="active">About</a>
+        </nav>
+        <div class="user-profile">
+            <img src="profile.png" alt="Profile" class="profile-img" id="profileImg">
+            <span id="username"></span>
+            <script>
+
+                document.addEventListener("DOMContentLoaded", () => {
+                    const name = localStorage.getItem("name");
+                    if (name) {
+                        document.getElementById("username").innerText = `Welcome, ${name}`;
+                    } else {
+                        document.getElementById("username").innerText = "Guest";
+                    }
+                });
+            </script>
+        </div>
+    </header>
+
+    <main class="form-section">
+        <div class="form-container">
+            <div class="form-header">
+                <h2>About College Voice</h2>
+                <p>Learn more about our platform.</p>
+            </div>
+
+            <p>
+                College Voice is a secure and transparent platform built to empower students
+                by providing them with a channel to raise complaints and give feedback.
+                Our goal is to ensure that every voice is heard and addressed fairly.
+            </p>
+            <p>
+                Whether it’s about academics, hostel facilities, mess quality, or any other
+                issue faced on campus, students can submit their concerns here and track their
+                resolution status easily.
+            </p>
+        </div>
+    </main>
+
+    <footer class="footer">
+        <p>&copy; 2025 College Voice Portal. All Rights Reserved.</p>
+    </footer>
+
+</body>
+
+</html>

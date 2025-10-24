@@ -1,0 +1,102 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>My Complaints</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+
+<body>
+
+    <!-- Header -->
+    <header class="header">
+        <div class="logo">College Voice</div>
+        <nav class="nav-links">
+            <a href="index.html">Home</a>
+            <a href="complaint.html">My Complaints</a>
+            <a href="about.html">About</a>
+        </nav>
+        <button id="loginBtn" onclick="window.location.href='login.html'" class="btn">Login</button>
+        <div class="user-profile hidden" id="userProfile">
+            <img src="profile.png" alt="Profile" class="profile-img" id="profileImg">
+            <span id="username"></span>
+            <button onclick="logout()" class="btn">Logout</button>
+        </div>
+    </header>
+
+    <!-- Main content -->
+    <main class="form-section">
+        <div class="form-container">
+            <div class="form-header">
+                <h2>My Complaints</h2>
+                <p>View and track the status of your submitted complaints.</p>
+            </div>
+
+            <!-- Container where complaints will be injected -->
+            <div id="complaintsList"></div>
+        </div>
+    </main>
+
+    <!-- Footer -->
+    <footer class="footer">
+        <p>&copy; 2025 College Voice Portal. All Rights Reserved.</p>
+    </footer>
+    <script>
+        function logout() {
+            localStorage.removeItem("name");
+            localStorage.removeItem("token");
+            window.location.href = "index.html";
+        }
+
+        document.addEventListener("DOMContentLoaded", () => {
+            const name = localStorage.getItem("name");
+            if (name) {
+                document.getElementById("userProfile").classList.remove("hidden");
+                document.getElementById("loginBtn").classList.add("hidden");
+                document.getElementById("username").innerText = `Welcome, ${name}`;
+            } else {
+                document.getElementById("loginBtn").classList.remove("hidden");
+                document.getElementById("userProfile").classList.add("hidden");
+            }
+        });
+    </script>
+    <script src="script.js"></script>
+    <script>
+        document.addEventListener("DOMContentLoaded", async () => {
+            const token = localStorage.getItem("token");
+            const complaintsList = document.getElementById("complaintsList");
+            try {
+                const res = await fetch("http://localhost:5001/api/complaints/my", {
+                    headers: {
+                        "Authorization": `Bearer ${token}`
+                    }
+                });
+
+                const complaints = await res.json();
+                if (!Array.isArray(complaints) || complaints.length === 0) {
+                    complaintsList.innerHTML = "<p>No complaints submitted yet.</p>";
+                    return;
+                }
+
+                complaintsList.innerHTML = complaints.map(c => {
+                    const statusClass = (c.status || "Pending").toLowerCase();
+                    return `
+            <div class="complaint-card ${statusClass}">
+              <h3>${c.category}</h3>
+              <p><strong>Status:</strong> ${c.status || "Pending"}</p>
+              <p><strong>Description:</strong> ${c.description}</p>
+              <small>Submitted: ${new Date(c.createdAt).toLocaleDateString()}</small>
+            </div>
+          `;
+                }).join("");
+            } catch (err) {
+                console.error("Error fetching complaints:", err);
+                complaintsList.innerHTML = "<p>Error loading complaints.</p>";
+            }
+        });
+    </script>
+</body>
+
+</html>

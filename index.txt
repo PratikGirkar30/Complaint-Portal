@@ -1,0 +1,106 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Complaint & Feedback Portal</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css" />
+    <link rel="stylesheet" href="style.css">
+</head>
+
+<body>
+
+    <header class="header">
+        <div class="logo">College Voice</div>
+        <nav class="nav-links">
+            <a href="index.html">Home</a>
+            <a href="complaint.html">My Complaints</a>
+            <a href="about.html">About</a>
+        </nav>
+        <a href="login.html" class="btn">Login / Register</a>
+    </header>
+
+    <section class="hero">
+        <div class="hero-content">
+            <h1>Raise Your Voice, Be Heard</h1>
+            <p>A secure and transparent platform for student complaints and feedback.</p>
+        </div>
+    </section>
+
+    <main class="form-section">
+        <div class="form-container">
+            <div class="form-header">
+                <h2>Submit Your Complaint</h2>
+                <p>Please fill out the form below with all the necessary details.</p>
+            </div>
+
+            <form id="complaint-form">
+                <div class="form-grid">
+                    <div class="form-group">
+                        <label for="name"><i class="fas fa-user icon"></i> Full Name</label>
+                        <input type="text" id="name" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="rollNo"><i class="fas fa-id-card icon"></i> Roll Number</label>
+                        <input type="text" id="rollNo" required>
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <label for="email"><i class="fas fa-envelope icon"></i> Email Address</label>
+                    <input type="email" id="email" required>
+                </div>
+
+                <hr class="separator">
+
+                <div class="form-group">
+                    <label for="title"><i class="fas fa-heading icon"></i> Complaint Title</label>
+                    <input type="text" id="title" placeholder="e.g., Issue with library book availability" required>
+                </div>
+
+                <div class="form-group">
+                    <label for="description"><i class="fas fa-paragraph icon"></i> Full Description</label>
+                    <textarea id="description" rows="5" placeholder="Describe the issue in detail..."
+                        required></textarea>
+                </div>
+
+                <div class="form-group">
+                    <label for="category"><i class="fas fa-tag icon"></i> Category</label>
+                    <select id="category" required>
+                        <option value="" disabled selected>Select a category...</option>
+                        <option value="Teaching">Teaching & Academics</option>
+                        <option value="Hostel">Hostel & Accommodation</option>
+                        <option value="Mess">Mess & Canteen</option>
+                        <option value="Library">Library</option>
+                        <option value="Fees">Fees & Accounts</option>
+                        <option value="Behaviour">Staff/Student Behaviour</option>
+                        <option value="Other">Other</option>
+                    </select>
+                </div>
+
+                <div class="checkbox-group">
+                    <input type="checkbox" id="isAnonymous">
+                    <label for="isAnonymous">I want to submit this complaint anonymously.</label>
+                </div>
+
+                <button type="submit" class="submit-btn">Submit Complaint <i class="fas fa-paper-plane"></i></button>
+
+                <div id="status-message" class="status-message"></div>
+            </form>
+            <div id="complaintMessage"></div>
+            <script src="complaint.js"></script>
+        </div>
+    </main>
+
+    <footer class="footer">
+        <p>&copy; 2025 College Voice Portal. All Rights Reserved.</p>
+    </footer>
+
+    <script src="script.js"></script>
+</body>
+
+</html>

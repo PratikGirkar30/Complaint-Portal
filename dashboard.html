@@ -1,0 +1,187 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Admin Dashboard</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css" />
+    <link rel="stylesheet" href="style.css">
+</head>
+
+<body>
+
+    <header class="header">
+        <div class="logo">College Voice</div>
+        <nav class="nav-links">
+            <a href="index.html">Home</a>
+            <a href="dashboard.html">All Complaints</a>
+            <a href="about.html">About</a>
+        </nav>
+        <div class="user-profile" id="userProfile">
+            <img src="profile.png" alt="Profile" class="profile-img" id="profileImg">
+            <span id="username">Welcome, Admin</span>
+            <button onclick="logout()" class="btn">Logout</button>
+        </div>
+    </header>
+
+    <!-- Main -->
+    <main class="form-section">
+        <div class="form-container" style="max-width: 100%;">
+            <div class="form-header">
+                <h2>Admin Dashboard</h2>
+                <p>Manage all complaints submitted by users.</p>
+            </div>
+
+            <!-- Table to display complaints -->
+            <table id="complaintsTable">
+                <thead>
+                    <tr>
+                        <th>Category</th>
+                        <th>Description</th>
+                        <th>User Name</th>
+                        <th>Email</th>
+                        <th>Status</th>
+                        <th>Created At</th>
+                        <th>Actions</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <!-- Complaints will be injected here via JS -->
+                </tbody>
+            </table>
+        </div>
+    </main>
+
+    <style>
+        #complaintsTable {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 20px;
+        }
+
+        #complaintsTable th,
+        #complaintsTable td {
+            border: 1px solid #ddd;
+            padding: 10px;
+            text-align: left;
+        }
+
+        #complaintsTable th {
+            background-color: #4caf50;
+            color: white;
+        }
+
+        #complaintsTable tr:nth-child(even) {
+            background-color: #f9f9f9;
+        }
+
+        .action-btn {
+            padding: 5px 10px;
+            margin-right: 5px;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            color: white;
+        }
+
+        .delete-btn {
+            background-color: #f44336;
+        }
+
+        .update-btn {
+            background-color: #2196f3;
+        }
+    </style>
+    <script src="https://cdn.jsdelivr.net/npm/jwt-decode/build/jwt-decode.min.js"></script>
+
+    <script>
+        async function fetchComplaints() {
+            const token = localStorage.getItem("token");
+            const tableBody = document.querySelector("#complaintsTable tbody");
+            try {
+                const res = await fetch("http://localhost:5001/api/complaints", {
+                    headers: { Authorization: `Bearer ${token}` }
+                });
+                const complaints = await res.json();
+
+                tableBody.innerHTML = complaints.map(c => `
+        <tr>
+          <td>${c.category}</td>
+          <td>${c.description}</td>
+          <td>${c.isAnonymous ? 'Anonymous' : (c.user ? c.user.name : 'Anonymous')}</td>
+          <td>${c.isAnonymous ? '-' : (c.user ? c.user.email : '-')}</td>
+          <td>${c.status || 'Pending'}</td>
+          <td>${new Date(c.createdAt).toLocaleDateString()}</td>
+          <td>
+            <button class="update-btn" onclick="updateStatus('${c._id}')">Update Status</button>
+            <button class="delete-btn" onclick="deleteComplaint('${c._id}')">Delete</button>
+          </td>
+        </tr>
+      `).join("");
+            } catch (err) {
+                console.error("Error fetching complaints:", err);
+                tableBody.innerHTML = "<tr><td colspan='7'>Failed to load complaints.</td></tr>";
+            }
+        }
+
+        async function updateStatus(id) {
+            const newStatus = prompt("Enter new status (Pending, Resolved, Rejected):");
+            if (!newStatus) return;
+            const token = localStorage.getItem("token");
+            try {
+                await fetch(`http://localhost:5001/api/complaints/${id}`, {
+                    method: "PUT",
+                    headers: {
+                        "Content-Type": "application/json",
+                        Authorization: `Bearer ${token}`
+                    },
+                    body: JSON.stringify({ status: newStatus })
+                });
+                fetchComplaints(); // refresh table
+            } catch (err) {
+                console.error("Error updating status:", err);
+            }
+        }
+
+        async function deleteComplaint(id) {
+            if (!confirm("Are you sure you want to delete this complaint?")) return;
+            const token = localStorage.getItem("token");
+            try {
+                await fetch(`http://localhost:5001/api/complaints/${id}`, {
+                    method: "DELETE",
+                    headers: { "Authorization": `Bearer ${token}` }
+                });
+                fetchComplaints(); // refresh table
+            } catch (err) {
+                console.error("Error deleting complaint:", err);
+            }
+        }
+
+        // Load complaints on page load
+        document.addEventListener("DOMContentLoaded", fetchComplaints);
+    </script>
+
+    <!-- End Main -->
+    <footer class="footer">
+        <p>&copy; 2025 College Voice Portal. All Rights Reserved.</p>
+    </footer>
+    <script>
+        function logout() {
+            localStorage.removeItem("name");
+            localStorage.removeItem("token");
+            window.location.href = "index.html";
+        }
+        const token = localStorage.getItem("token");
+        const user = jwt_decode(token);
+        if (!token || !user || user.role !== "admin") {
+            window.location.href = "index.html";
+        }
+    </script>
+    <script src="script.js"></script>
+</body>
+
+</html>
