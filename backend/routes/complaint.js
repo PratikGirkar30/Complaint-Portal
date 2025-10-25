@@ -1,5 +1,5 @@
 import express from 'express';
-import Complaint from '../models/Complaint.js';
+import Complaint from '../models/complaint.js';
 import { requireAuth, requireAdmin, optionalAuth } from '../middleware/auth.js';
 
 const router = express.Router();
@@ -93,3 +93,4 @@ router.delete('/:id', requireAuth, requireAdmin, async (req, res) => {
 });
 
 export default router;
+
